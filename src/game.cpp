@@ -21,13 +21,18 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
   while (running) {
     frame_start = SDL_GetTicks();
-
+    
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(snake, food, spinach, draw_spinach);
 
     frame_end = SDL_GetTicks();
+    
+    // Set draw_spinach as false after 5 seconds of score being a multiple of 10
+    if (frame_end - spinach_start_time >= 5000){
+      draw_spinach = false;
+    }
 
     // Keep track of how long each loop through the input/update/render cycle
     // takes.
@@ -57,9 +62,38 @@ void Game::PlaceFood() {
     y = random_h(engine);
     // Check that the location is not occupied by a snake item before placing
     // food.
-    if (!snake.SnakeCell(x, y)) {
+    if (!snake.SnakeCell(x, y) && !(SpinachCell(x,y) && draw_spinach)) {
       food.x = x;
       food.y = y;
+      return;
+    }
+  }
+}
+
+bool Game::FoodCell(int x, int y){
+  if ( x == food.x && y == food.y){
+    return true;
+  }
+  return false;
+}
+
+bool Game::SpinachCell(int x, int y){
+  if ( x == spinach.x && y == spinach.y && draw_spinach){
+    return true;
+  }
+  return false;
+}
+
+void Game::PlaceSpinach() {
+  int x, y;
+  while (true) {
+    x = random_w(engine);
+    y = random_h(engine);
+    // Check that the location is not occupied by a snake item and is not a food cell before
+    // placing spinach.
+    if (!snake.SnakeCell(x, y) && !FoodCell(x,y)) {
+      spinach.x = x;
+      spinach.y = y;
       return;
     }
   }
@@ -74,12 +108,27 @@ void Game::Update() {
   int new_y = static_cast<int>(snake.head_y);
 
   // Check if there's food over here
-  if (food.x == new_x && food.y == new_y) {
+  if (food.x == new_x && food.y == new_y){
     score++;
     PlaceFood();
+    // Place a new Spinach when score is a multiple of 10 and start timer
+    if (score % 10 == 0 && score > 0 && !draw_spinach){
+      PlaceSpinach();
+      draw_spinach = true;
+      spinach_start_time = SDL_GetTicks();
+    }
     // Grow snake and increase speed.
     snake.GrowBody();
     snake.speed += 0.02;
+  }
+  // Check if there is spinach over here
+  else if (spinach.x == new_x && spinach.y == new_y && draw_spinach){
+    //Increment score, change location of spinach and set draw_spinach to false
+    score++;
+    draw_spinach = false;
+    // Shrink the snake's body and decrement speed
+    snake.ShrinkBody();
+    snake.speed -= 0.02;
   }
 }
 

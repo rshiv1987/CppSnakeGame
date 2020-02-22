@@ -18,6 +18,9 @@ class Game {
  private:
   Snake snake;
   SDL_Point food;
+  SDL_Point spinach;
+  bool draw_spinach;
+  Uint32 spinach_start_time;
 
   std::random_device dev;
   std::mt19937 engine;
@@ -27,6 +30,9 @@ class Game {
   int score{0};
 
   void PlaceFood();
+  bool FoodCell(int x, int y);
+  bool SpinachCell(int x, int y);
+  void PlaceSpinach();
   void Update();
 };
 

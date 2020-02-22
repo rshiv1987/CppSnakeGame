@@ -1,12 +1,10 @@
-# CPPND: Capstone Snake Game Example - First Commit
+# CPPND: Capstone Snake Game extension with Spinach
 
-This is a starter repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
+This is a simple yet fun twist of the snake game with healthy food, spinach, appearing along with the regular food whenever score becomes a multiple of ten (eg, score = 10, 20, 30, etc). The spinach appears on the screen for a limited duration of 5 seconds after which it disappears. It is true in this game world (at least), that if the snake eats the spinach, the snake shrinks in size rather than increasing. It also reduces its speed by eating spinach, which helps the user play for longer. 
+
+This is build from the starter repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
 
 <img src="snake_game.gif"/>
-
-The Capstone Project gives you a chance to integrate what you've learned throughout this program. This project will become an important part of your portfolio to share with current and future colleagues and employers.
-
-In this project, you can build your own C++ application or extend this Snake game, following the principles you have learned throughout this Nanodegree Program. This project will demonstrate that you can independently create applications using a wide range of C++ features.
 
 ## Dependencies for Running Locally
 * cmake >= 3.7

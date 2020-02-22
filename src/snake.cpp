@@ -48,8 +48,16 @@ void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) 
   body.push_back(prev_head_cell);
 
   if (!growing) {
-    // Remove the tail from the vector.
-    body.erase(body.begin());
+    // Remove the tail N elements from the vector
+    // where N = 1 for regular update
+    // and N = 2 if shrinking is true
+    int N = 1;
+    if (shrinking){
+      N = 2;
+      shrinking = false;
+      size--;
+    }
+    body.erase(body.begin(), body.begin()+N);  
   } else {
     growing = false;
     size++;
@@ -64,6 +72,8 @@ void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) 
 }
 
 void Snake::GrowBody() { growing = true; }
+
+void Snake::ShrinkBody() { shrinking = true; }
 
 // Inefficient method to check if cell is occupied by snake.
 bool Snake::SnakeCell(int x, int y) {
